@@ -1,4 +1,6 @@
 tasks:
+  install_requirements:
+    shell: pip install -r requirements.txt
   scraper:
     shell: python3 nytimes.py
 artifactsDir:
