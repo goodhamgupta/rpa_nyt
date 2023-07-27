@@ -1,9 +1,9 @@
 import csv
 import re
 import uuid
+import urllib3
 from datetime import datetime, timedelta
 
-import requests
 from dateutil.relativedelta import relativedelta
 from RPA.Browser.Selenium import Selenium
 from selenium.webdriver.common.by import By
@@ -141,10 +141,11 @@ class Crawler:
         return result
 
     def download_and_save_image(self, url: str):
-        response = requests.get(url)
+        http = urllib3.PoolManager()
+        response = http.request("GET", url)
         file_name = f"{uuid.uuid4()}.jpg"
         with open(file_name, "wb") as f:
-            f.write(response.content)
+            f.write(response.data)
         return file_name
 
     def contains_monetary_values(self, text):
