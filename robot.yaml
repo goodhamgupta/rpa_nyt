@@ -3,3 +3,9 @@ tasks:
     shell: python3 nytimes.py
 artifactsDir:
   output
+environmentConfigs:
+  - config.yaml
+PATH:
+    - .
+PYTHONPATH:
+    - .

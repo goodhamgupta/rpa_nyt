@@ -1,7 +1,7 @@
 import csv
 import re
 import uuid
-import urllib3
+import requests
 from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
@@ -141,12 +141,15 @@ class Crawler:
         return result
 
     def download_and_save_image(self, url: str):
-        http = urllib3.PoolManager()
-        response = http.request("GET", url)
-        file_name = f"{uuid.uuid4()}.jpg"
-        with open(file_name, "wb") as f:
-            f.write(response.data)
-        return file_name
+        response = requests.get(url)
+        if response.status_code == 200:
+            file_name = f"{uuid.uuid4()}.jpg"
+            with open(file_name, "wb") as f:
+                f.write(response.data)
+            return file_name
+        else:
+            print(f"Failed to fetch url: {url}")
+            return None
 
     def contains_monetary_values(self, text):
         pattern = r"\$[\d,.]+|\b\d+(\.\d{1,2})?\s?(billion|million|thousand)?\s?(dollars|USD)?\b"
@@ -185,6 +188,7 @@ class Crawler:
             self.load_all_articles()
             records = self.fetch_articles(search_term)
             self.write_to_csv(records)
+            print("Completed crawling")
         finally:
             browser_lib.close_all_browsers()
 
