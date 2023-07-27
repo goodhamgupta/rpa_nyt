@@ -2,6 +2,7 @@ import csv
 import re
 import uuid
 import requests
+import pandas as pd
 from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
@@ -176,6 +177,10 @@ class Crawler:
             writer.writeheader()
             writer.writerows(records)
 
+    def write_to_excel(self, records, sheet_name='result'):
+        df = pd.DataFrame(records)
+        df.to_excel('output/nytimes.xlsx', sheet_name=sheet_name, index=False)
+
     def run(self):
         try:
             search_term = "messi"
@@ -187,7 +192,8 @@ class Crawler:
             self.set_date_range()
             # self.load_all_articles()
             records = self.fetch_articles(search_term)
-            self.write_to_csv(records)
+            # self.write_to_csv(records)
+            self.write_to_excel(records)
             print("Completed crawling")
         finally:
             browser_lib.close_all_browsers()
