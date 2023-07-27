@@ -145,7 +145,7 @@ class Crawler:
         if response.status_code == 200:
             file_name = f"{uuid.uuid4()}.jpg"
             with open(file_name, "wb") as f:
-                f.write(response.data)
+                f.write(response.content)
             return file_name
         else:
             print(f"Failed to fetch url: {url}")
@@ -185,7 +185,7 @@ class Crawler:
             self.set_sorting_order()
             self.set_section()
             self.set_date_range()
-            self.load_all_articles()
+            # self.load_all_articles()
             records = self.fetch_articles(search_term)
             self.write_to_csv(records)
             print("Completed crawling")
