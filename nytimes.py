@@ -176,6 +176,7 @@ class Crawler:
             self.open_url()
             self.accept_conditions()
             self.click_search_button(search_phrase)
+            self.accept_conditions()
             self.set_sorting_order()
             self.set_section()
             self.set_date_range(months)
