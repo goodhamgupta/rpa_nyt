@@ -1,0 +1,11 @@
+tasks:
+  default:
+    - name: Install Python dependencies
+      robot: pip
+      args: ["install", "-r", "requirements.txt"]
+      # You should have a requirements.txt file with the necessary Python dependencies.
+
+    - name: Run NY Times scraper
+      robot: python
+      args: ["nytimes.py"]
+      # Make sure to place the nytimes.py file in the same directory as this robot.yaml file.
