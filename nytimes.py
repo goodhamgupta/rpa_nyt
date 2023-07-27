@@ -144,7 +144,7 @@ class Crawler:
         response = requests.get(url)
         if response.status_code == 200:
             file_name = f"{uuid.uuid4()}.jpg"
-            with open(file_name, "wb") as f:
+            with open(f"output/{file_name}", "wb") as f:
                 f.write(response.content)
             return file_name
         else:
@@ -161,7 +161,7 @@ class Crawler:
         return (title_count, description_count)
 
     def write_to_csv(self, records):
-        with open("nytimes.csv", "w", newline="") as csvfile:
+        with open("output/nytimes.csv", "w", newline="") as csvfile:
             fieldnames = [
                 "title",
                 "description",
