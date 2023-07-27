@@ -4,7 +4,7 @@ tasks:
 artifactsDir:
   output
 environmentConfigs:
-  - config.yaml
+  - conda.yaml
 PATH:
     - .
 PYTHONPATH:
