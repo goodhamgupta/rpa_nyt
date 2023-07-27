@@ -40,10 +40,11 @@ class Crawler:
         time.sleep(10)
         if browser_lib.is_element_visible(css_selector):
             browser_lib.click_button(css_selector)
-        elif browser_lib.is_element_visible(self.ACCEPT_COOKIE_SELECTOR):
+        self.accept_cookies()
+
+    def accept_cookies(self):
+        if browser_lib.is_element_visible(self.ACCEPT_COOKIE_SELECTOR):
             browser_lib.click_button(self.ACCEPT_COOKIE_SELECTOR)
-        else:
-            pass
 
     def click_search_button(self, search_term: str = "messi"):
         # type: ignore
@@ -176,7 +177,7 @@ class Crawler:
             self.open_url()
             self.accept_conditions()
             self.click_search_button(search_phrase)
-            self.accept_conditions()
+            self.accept_cookies()
             self.set_sorting_order()
             self.set_section()
             self.set_date_range(months)
