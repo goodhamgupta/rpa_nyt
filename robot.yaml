@@ -3,8 +3,8 @@ tasks:
     shell: python3 nytimes.py
 artifactsDir:
   output
-environmentConfigs:
-  - conda.yaml
+condaConfigFile:
+  conda.yaml
 PATH:
     - .
 PYTHONPATH:
