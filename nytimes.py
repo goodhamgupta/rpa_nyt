@@ -4,6 +4,7 @@ import uuid
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
+from utils import write_to_excel
 
 from dateutil.relativedelta import relativedelta
 from RPA.Browser.Selenium import Selenium
@@ -161,26 +162,6 @@ class Crawler:
         description_count = description.lower().count(search_term.lower())
         return (title_count, description_count)
 
-    def write_to_csv(self, records):
-        with open("output/nytimes.csv", "w", newline="") as csvfile:
-            fieldnames = [
-                "title",
-                "description",
-                "article_date",
-                "image_url",
-                "image_path",
-                "title_count",
-                "description_count",
-                "contains_monetary_value",
-            ]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(records)
-
-    def write_to_excel(self, records, sheet_name='result'):
-        df = pd.DataFrame(records)
-        df.to_excel('output/nytimes.xlsx', sheet_name=sheet_name, index=False)
-
     def run(self):
         try:
             search_term = "messi"
@@ -192,8 +173,7 @@ class Crawler:
             self.set_date_range()
             # self.load_all_articles()
             records = self.fetch_articles(search_term)
-            # self.write_to_csv(records)
-            self.write_to_excel(records)
+            write_to_excel(records)
             print("Completed crawling")
         finally:
             browser_lib.close_all_browsers()
