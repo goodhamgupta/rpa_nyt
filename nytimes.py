@@ -1,6 +1,7 @@
 import re
 import uuid
 from datetime import datetime, timedelta
+import time
 
 import requests
 from dateutil.relativedelta import relativedelta
@@ -35,17 +36,12 @@ class Crawler:
 
     def accept_conditions(self):
         css_selector = "css:.css-1fzhd9j"
-        browser_lib.wait_until_element_is_visible(css_selector, timeout=10)
-        flag = False
+        # Condition button
+        time.sleep(10)
         if browser_lib.is_element_visible(css_selector):
             browser_lib.click_button(css_selector)
-            flag = True
-        if not flag:
-            browser_lib.wait_until_element_is_visible(
-                self.ACCEPT_COOKIE_SELECTOR, timeout=10
-            )
-            if browser_lib.is_element_visible(self.ACCEPT_COOKIE_SELECTOR):
-                browser_lib.click_button(self.ACCEPT_COOKIE_SELECTOR)
+        else:
+            browser_lib.click_button(self.ACCEPT_COOKIE_SELECTOR)
 
     def click_search_button(self, search_term: str = "messi"):
         # type: ignore
