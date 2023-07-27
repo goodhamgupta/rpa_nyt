@@ -1,7 +1,7 @@
-import csv
 import re
 import uuid
 from datetime import datetime, timedelta
+from work_item_getter import WorkItemGetter
 
 import pandas as pd
 import requests
@@ -192,5 +192,12 @@ class Crawler:
 
 
 if __name__ == "__main__":
-    crawler = Crawler()
-    crawler.run()
+    # crawler = Crawler()
+    search_phrase = WorkItemGetter().search_phrase()
+    news = WorkItemGetter().news_categories()
+    months= WorkItemGetter().months()
+    print("**********************")
+    print(search_phrase, news, months)
+    print("**********************")
+
+    # crawler.run()
