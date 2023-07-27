@@ -104,6 +104,13 @@ class Crawler:
             if sanitized_article_date < self.start_date:
                 break
             browser_lib.screenshot(filename=f"output/debug_{article_date}.png")
+            # print("Fetching attribute..")
+            # import pdb
+            # pdb.set_trace()
+            # element = browser_lib.find_element(By.CLASS_NAME, "css:css-f63blv e2qmvq0")
+            # print("****************************************")
+            # print("HTML CONTENT: ", element.get_attribute("innerHTML"))
+            # print("****************************************")
             browser_lib.wait_and_click_button(show_more_button_selector)
 
     def fetch_articles(self, search_term):
@@ -173,10 +180,13 @@ class Crawler:
             self.set_sorting_order()
             self.set_section()
             self.set_date_range()
-            self.load_all_articles()
+            # self.load_all_articles()
             records = self.fetch_articles(search_term)
             write_to_excel(records)
             print("Completed crawling")
+        except Exception as e:
+            print("ERROR OCCURRED")
+            raise e
         finally:
             browser_lib.close_all_browsers()
 
