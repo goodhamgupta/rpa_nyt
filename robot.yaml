@@ -1,7 +1,5 @@
 tasks:
   scraper:
-    command:
-      - python
-      - nytimes.py
+    shell: python nytimes.py
 artifactsDir:
   output
