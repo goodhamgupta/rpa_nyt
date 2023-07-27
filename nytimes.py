@@ -1,15 +1,14 @@
 import re
 import uuid
 from datetime import datetime, timedelta
-from work_item_getter import WorkItemGetter
 
-import pandas as pd
 import requests
 from dateutil.relativedelta import relativedelta
 from RPA.Browser.Selenium import Selenium
 from selenium.webdriver.common.by import By
 
 from utils import write_to_excel
+from work_item_getter import WorkItemGetter
 
 browser_lib = Selenium()
 
@@ -17,6 +16,7 @@ browser_lib = Selenium()
 class Crawler:
     SECTION_CHECKBOX_BASE_SELECTOR = "css:#site-content > div > div.css-1npexfx > div.css-1az02az > div > div > div:nth-child(2) > div > div > div > ul > li:nth-child({list_number}) > label > input[type=checkbox]"
     DATE_RANGE_BASE_SELECTOR = "css:#site-content > div > div.css-1npexfx > div.css-1az02az > div > div > div.css-wsup08 > div > div > div > ul > li:nth-child({list_number}) > button"
+    ACCEPT_COOKIE_SELECTOR = "css:#site-content > div.gdpr.shown.expanded.expanded-dock.css-jgcl4n.efw9frv0 > div.css-f63blv.e2qmvq0 > div > div.css-1cndoy8 > button:nth-child(1)"
     SECTION_MAPPING = [
         "Any",
         "Arts",
@@ -35,8 +35,17 @@ class Crawler:
 
     def accept_conditions(self):
         css_selector = "css:.css-1fzhd9j"
-        browser_lib.wait_until_element_is_visible(css_selector)
-        browser_lib.click_button(css_selector)
+        browser_lib.wait_until_element_is_visible(css_selector, timeout=10)
+        flag = False
+        if browser_lib.is_element_visible(css_selector):
+            browser_lib.click_button(css_selector)
+            flag = True
+        if not flag:
+            browser_lib.wait_until_element_is_visible(
+                self.ACCEPT_COOKIE_SELECTOR, timeout=10
+            )
+            if browser_lib.is_element_visible(self.ACCEPT_COOKIE_SELECTOR):
+                browser_lib.click_button(self.ACCEPT_COOKIE_SELECTOR)
 
     def click_search_button(self, search_term: str = "messi"):
         # type: ignore
@@ -104,13 +113,6 @@ class Crawler:
             if sanitized_article_date < self.start_date:
                 break
             browser_lib.screenshot(filename=f"output/debug_{article_date}.png")
-            # print("Fetching attribute..")
-            # import pdb
-            # pdb.set_trace()
-            # element = browser_lib.find_element(By.CLASS_NAME, "css:css-f63blv e2qmvq0")
-            # print("****************************************")
-            # print("HTML CONTENT: ", element.get_attribute("innerHTML"))
-            # print("****************************************")
             browser_lib.wait_and_click_button(show_more_button_selector)
 
     def fetch_articles(self, search_term):
@@ -171,17 +173,16 @@ class Crawler:
         description_count = description.lower().count(search_term.lower())
         return (title_count, description_count)
 
-    def run(self):
+    def run(self, search_phrase, news_categories, months):
         try:
-            search_term = "messi"
             self.open_url()
             self.accept_conditions()
-            self.click_search_button(search_term)
+            self.click_search_button(search_phrase)
             self.set_sorting_order()
             self.set_section()
-            self.set_date_range()
+            self.set_date_range(months)
             # self.load_all_articles()
-            records = self.fetch_articles(search_term)
+            records = self.fetch_articles(search_phrase)
             write_to_excel(records)
             print("Completed crawling")
         except Exception as e:
@@ -192,12 +193,12 @@ class Crawler:
 
 
 if __name__ == "__main__":
-    # crawler = Crawler()
+    crawler = Crawler()
     search_phrase = WorkItemGetter().search_phrase()
-    news = WorkItemGetter().news_categories()
-    months= WorkItemGetter().months()
+    news_categories = WorkItemGetter().news_categories()
+    months = WorkItemGetter().months()
     print("**********************")
-    print(search_phrase, news, months)
+    print(search_phrase, news_categories, months)
     print("**********************")
 
-    # crawler.run()
+    crawler.run(search_phrase, news_categories, months)
