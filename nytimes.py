@@ -40,8 +40,10 @@ class Crawler:
         time.sleep(10)
         if browser_lib.is_element_visible(css_selector):
             browser_lib.click_button(css_selector)
-        else:
+        elif browser_lib.is_element_visible(self.ACCEPT_COOKIE_SELECTOR):
             browser_lib.click_button(self.ACCEPT_COOKIE_SELECTOR)
+        else:
+            pass
 
     def click_search_button(self, search_term: str = "messi"):
         # type: ignore
