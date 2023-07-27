@@ -177,7 +177,7 @@ class Crawler:
             self.set_sorting_order()
             self.set_section()
             self.set_date_range(months)
-            # self.load_all_articles()
+            self.load_all_articles()
             records = self.fetch_articles(search_phrase)
             write_to_excel(records)
             print("Completed crawling")
