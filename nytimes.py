@@ -1,14 +1,15 @@
 import csv
 import re
 import uuid
-import requests
-import pandas as pd
 from datetime import datetime, timedelta
-from utils import write_to_excel
 
+import pandas as pd
+import requests
 from dateutil.relativedelta import relativedelta
 from RPA.Browser.Selenium import Selenium
 from selenium.webdriver.common.by import By
+
+from utils import write_to_excel
 
 browser_lib = Selenium()
 
@@ -102,6 +103,7 @@ class Crawler:
             sanitized_article_date = datetime.strptime(article_date, "%B %d, %Y")
             if sanitized_article_date < self.start_date:
                 break
+            browser_lib.screenshot(location=f"output/debug_{article_date}.png")
             browser_lib.wait_and_click_button(show_more_button_selector)
 
     def fetch_articles(self, search_term):
@@ -171,7 +173,7 @@ class Crawler:
             self.set_sorting_order()
             self.set_section()
             self.set_date_range()
-            # self.load_all_articles()
+            self.load_all_articles()
             records = self.fetch_articles(search_term)
             write_to_excel(records)
             print("Completed crawling")
