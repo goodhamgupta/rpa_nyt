@@ -100,7 +100,7 @@ class Crawler:
             sanitized_article_date = datetime.strptime(article_date, "%B %d, %Y")
             if sanitized_article_date < self.start_date:
                 break
-            browser_lib.click_button(show_more_button_selector)
+            browser_lib.wait_and_click_button(show_more_button_selector)
 
     def fetch_articles(self, search_term):
         result = []
