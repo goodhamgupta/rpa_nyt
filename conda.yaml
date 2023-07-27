@@ -5,3 +5,4 @@ conda:
   dependencies:
     - python=3.8
     - requests
+    - rpaframework
