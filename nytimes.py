@@ -111,7 +111,6 @@ class Crawler:
             sanitized_article_date = datetime.strptime(article_date, "%B %d, %Y")
             if sanitized_article_date < self.start_date:
                 break
-            browser_lib.screenshot(filename=f"output/debug_{article_date}.png")
             browser_lib.wait_and_click_button(show_more_button_selector)
 
     def fetch_articles(self, search_term):
