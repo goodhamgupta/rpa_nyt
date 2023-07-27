@@ -1,8 +1,8 @@
-# conda.yaml
-conda:
-  channels:
-    - conda-forge
-  dependencies:
-    - python=3.8
-    - requests
-    - rpaframework
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pip=22.1.2
+  - pip:
+    - requests==2.31.0
+    - rpaframework==19.3.1
